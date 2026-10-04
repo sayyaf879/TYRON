@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ============================================================
+         META TAGS & PAGE CONFIGURATION
+         These tags control how the page is displayed and behaves
+         across different devices, especially mobile.
+         ============================================================ -->
+
+    <!-- Character encoding: UTF-8 ensures proper display of international
+         characters (accents, emoji, non-Latin scripts). -->
+    <meta charset="UTF-8">
+
+    <!-- VIEWPORT: Critical for responsive design on mobile devices.
+         - width=device-width: Match the screen width of the device
+         - initial-scale=1.0: No zoom on load (1:1 pixel ratio)
+         - maximum-scale=1.0, user-scalable=no: Prevents pinch-zoom
+           (useful for app-like experiences where zoom would break layout)
+         - viewport-fit=cover: Extends content into the "safe area" on
+           iOS devices with notches (iPhone X+). Without this, content
+           would stop at the notch edges, leaving awkward gaps. -->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- APPLE-MOBILE-WEB-APP-CAPABLE: When "Add to Home Screen" is used
+         on iOS, this makes the page open in standalone mode (no Safari
+         UI bars). The page looks and feels like a native app. -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- APPLE-MOBILE-WEB-APP-STATUS-BAR-STYLE: Controls the iOS status
+         bar appearance in standalone mode. "black-translucent" makes
+         the status bar transparent so content can extend underneath. -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- THEME-COLOR: Sets the browser chrome color (address bar on
+         mobile Chrome, status bar on Android). Creates a cohesive
+         look when the page loads. -->
+    <meta name="theme-color" content="#050510">
+
+    <title>T.Y.R.O.N</title>
+
+    <!-- GOOGLE FONTS: Inter (body), Sora (display/logo) for a premium geometric look. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css?v=7.0">
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <!-- ============================================================
+         APP LAYOUT STRUCTURE (Single-Page, Vanilla HTML)
+         This is a single-page application with NO framework (React,
+         Vue, etc.). Everything is plain HTML + CSS + JS. The layout
+         follows a vertical stack: orb (background) -> header ->
+         chat area -> input bar.
+         ============================================================ -->
+    <div class="app">
+        <!-- BACKGROUND AMBIENT GLOW -->
+        <div id="orb-ambient-glow" aria-hidden="true"></div>
+
+        <!-- BACKGROUND PARTICLE CANVAS: subtle animated noise/particle layer -->
+        <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+        <!-- ORB-CONTAINER: WebGL orb as visual centerpiece -->
+        <div id="orb-container"></div>
+
+        <!-- ORB RING: Primary glowing gradient arc -->
+        <div id="orb-ring" aria-hidden="true">
+            <div class="orb-ring-arc"></div>
+        </div>
+
+        <!-- ORB RING 2: Secondary dashed reverse-rotating ring -->
+        <div id="orb-ring-2" aria-hidden="true"></div>
+
+        <!-- ORB RING 3: Tertiary outer dotted ring -->
+        <div id="orb-ring-3" aria-hidden="true"></div>
+
+        <!-- ============================================================
+             HEADER
+             Contains: logo/tagline, mode switch (General vs Realtime),
+             connection status badge, and new chat button.
+             ============================================================ -->
+        <header class="header glass-panel">
+            <div class="header-left">
+                <div class="logo-wrap">
+                    <h1 class="logo">T.Y.R.O.N</h1>
+                    <span class="logo-pulse-dot" aria-hidden="true"></span>
+                </div>
+                <span class="tagline">Your Personal AI Operating System</span>
+            </div>
+            <div class="header-right">
+                <!-- PHASE 1: Conversation utility controls. These are additive;
+                     the original status and New Chat controls remain intact. -->
+                <div class="header-tool-wrap">
+                    <button class="btn-icon header-tool-btn" id="chat-search-btn" title="Search conversation" aria-label="Search conversation" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                    <span class="header-tool-tooltip">Search</span>
+                </div>
+                <div class="header-tool-wrap">
+                    <button class="btn-icon header-tool-btn" id="temp-chat-btn" title="Temporary chat" aria-label="Toggle temporary chat" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16v16H4z"></path>
+                            <path d="M8 12h8"></path>
+                        </svg>
+                    </button>
+                    <span class="header-tool-tooltip">Temporary</span>
+                </div>
+
+                <!-- STATUS BADGE: Shows connection state (Online/Offline).
+                     The .status-dot is typically green when connected,
+                     red/gray when disconnected. Updated by script.js. -->
+                <div class="status-badge" id="status-badge">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Online</span>
+                </div>
+                <!-- NEW CHAT: Clears the conversation and starts fresh. -->
+                <div class="new-chat-wrap">
+                    <button class="btn-icon new-chat-btn" id="new-chat-btn" title="New Chat" aria-label="Start new chat">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                    </button>
+                    <span class="new-chat-tooltip">New Chat</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ============================================================
+             CHAT AREA
+             Scrollable region containing the conversation. Shows a
+             welcome screen (with chips) when empty, or message bubbles
+             when there's history.
+             ============================================================ -->
+        <main class="chat-area" id="chat-area">
+            <div class="chat-messages" id="chat-messages">
+                <!-- WELCOME SCREEN: Shown when there are no messages.
+                     Chips are quick-action buttons that send preset
+                     prompts when clicked. The greeting text (e.g. "Good
+                     evening") can be time-based. -->
+                <div class="welcome-screen" id="welcome-screen">
+                    <h2 class="welcome-title" id="welcome-title">Good evening.</h2>
+                    <div class="welcome-subtitle-wrap">
+                        <p class="welcome-sub">How may I assist you today?</p>
+                        <span class="welcome-idle-bar" aria-hidden="true"></span>
+                    </div>
+                    <div class="welcome-chips">
+                        <button class="chip" data-msg="What can you do?">
+                            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            What can you do?
+                        </button>
+                        <button class="chip" data-msg="Open YouTube for me">
+                            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            Open YouTube
+                        </button>
+                        <button class="chip" data-msg="Tell me a fun fact">
+                            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            Fun fact
+                        </button>
+                        <button class="chip" data-msg="Play some music">
+                            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                            Play music
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- FLOATING JUMP TO BOTTOM / NEW MESSAGES BUTTON -->
+            <button id="jump-bottom-btn" class="jump-bottom-btn glass-panel" title="Jump to latest messages" style="display: none;" type="button">
+                <span>New messages</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+        </main>
+
+        <!-- ============================================================
+             INPUT BAR
+             ============================================================ -->
+        <footer class="input-bar glass-panel">
+            <!-- ATTACHMENT TRAY: shows selected/uploaded files and folders -->
+            <div id="attachment-tray" class="attachment-tray" style="display: none;"></div>
+
+            <div class="input-wrapper">
+                <!-- PLUS / UPLOAD BUTTON & POPUP MENU -->
+                <div class="upload-dropdown-container" id="upload-dropdown-container">
+                    <button class="action-btn upload-btn" id="upload-btn" title="Add files or folder" type="button">
+                        <svg class="plus-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                    </button>
+                    <!-- POPUP MENU (Hidden by default; appears above plus button on click) -->
+                    <div class="upload-menu glass-panel" id="upload-menu" style="display: none;">
+                        <button class="upload-menu-item" id="menu-upload-file" type="button">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <span>Upload File(s)</span>
+                        </button>
+                        <button class="upload-menu-item" id="menu-upload-folder" type="button">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                </path>
+                            </svg>
+                            <span>Upload Folder</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden file and directory inputs -->
+                <input type="file" id="file-input" multiple style="display: none;">
+                <input type="file" id="folder-input" webkitdirectory directory multiple style="display: none;">
+
+                <textarea id="message-input" placeholder="Ask TYRON anything or discuss uploaded files..." rows="1"
+                    maxlength="32000"></textarea>
+                <div class="input-actions">
+                    <!-- MIC BUTTON: Two SVG states. .mic-icon = outline
+                         (idle). .mic-icon-active = filled square (recording).
+                         CSS/JS toggles visibility based on state. -->
+                    <button class="action-btn mic-btn" id="mic-btn" title="Voice input (Click to speak)">
+                        <!-- Microphone outline: mic body + stand -->
+                        <svg class="mic-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                            <line x1="12" y1="19" x2="12" y2="23" />
+                            <line x1="8" y1="23" x2="16" y2="23" />
+                        </svg>
+                        <!-- Filled square: "stop recording" / active state -->
+                        <svg class="mic-icon-active" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="4" y="4" width="16" height="16" rx="3" />
+                        </svg>
+                    </button>
+                    <!-- TYRON VOICE MODE BUTTON: Always-On continuous microphone -->
+                    <button class="action-btn jarvis-btn" id="jarvis-btn" title="TYRON Voice Mode (Always-On Mic)">
+                        <svg class="jarvis-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z" />
+                            <path d="M18 10v1a6 6 0 0 1-12 0v-1" />
+                            <line x1="12" y1="17" x2="12" y2="21" />
+                            <line x1="8" y1="21" x2="16" y2="21" />
+                            <circle cx="12" cy="6" r="1" fill="currentColor" />
+                        </svg>
+                    </button>
+                    <!-- TTS BUTTON: Text-to-speech. .tts-icon-off = speaker
+                         with X (disabled). .tts-icon-on = speaker with
+                         sound waves (enabled). -->
+                    <button class="action-btn tts-btn" id="tts-btn" title="Text to Speech">
+                        <!-- Speaker with X: TTS off -->
+                        <svg class="tts-icon-off" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                            <line x1="23" y1="9" x2="17" y2="15" />
+                            <line x1="17" y1="9" x2="23" y2="15" />
+                        </svg>
+                        <!-- Speaker with sound waves: TTS on -->
+                        <svg class="tts-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                        </svg>
+                    </button>
+                    <!-- STOP BUTTON: Visible only while TYRON is generating. -->
+                    <button class="action-btn stop-btn" id="stop-btn" title="Stop generating" aria-label="Stop generating" type="button" hidden>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+                        </svg>
+                    </button>
+
+                    <!-- SEND BUTTON: Paper plane / send icon -->
+                    <button class="action-btn send-btn" id="send-btn" title="Send message" type="button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="input-meta">
+                <span class="char-count" id="char-count"></span>
+            </div>
+        </footer>
+
+        <!-- ============================================================
+             SEARCH RESULTS WIDGET (Realtime mode)
+             Fixed panel on the right showing Tavily search data: query,
+             AI-synthesized answer, and source list. Toggle via header button.
+             ============================================================ -->
+        <aside class="search-results-widget glass-panel" id="search-results-widget" aria-hidden="true">
+            <div class="search-results-header">
+                <h3 class="search-results-title">Live search</h3>
+                <button class="search-results-close" id="search-results-close" title="Close"
+                    aria-label="Close search results">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="search-results-query" id="search-results-query"></div>
+            <div class="search-results-answer" id="search-results-answer"></div>
+            <div class="search-results-list" id="search-results-list"></div>
+        </aside>
+    </div>
+
+    <!-- ============================================================
+         CONVERSATION SEARCH MODAL (Phase 1)
+         Frontend-only search through messages currently loaded in this chat.
+         ============================================================ -->
+    <div id="chat-search-modal" class="chat-search-modal" aria-hidden="true">
+        <div class="chat-search-panel glass-panel" role="dialog" aria-modal="true" aria-label="Search conversation">
+            <div class="chat-search-head">
+                <div>
+                    <div class="chat-search-title">Search conversation</div>
+                    <div class="chat-search-subtitle">Find a message in the current chat</div>
+                </div>
+                <button id="chat-search-close" class="search-modal-close" type="button" aria-label="Close search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-search-input-wrap">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input id="chat-search-input" type="search" autocomplete="off" placeholder="Search messages…">
+            </div>
+            <div id="chat-search-results" class="chat-search-results"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         DROP OVERLAY (Drag & Drop files or folders of any size)
+         Fixed full-screen modal, only active when dragging items over window
+         ============================================================ -->
+    <div id="drop-overlay" class="drop-overlay" style="display: none;">
+        <div class="drop-modal glass-panel">
+            <div class="drop-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <h3 class="drop-title">Drop Files or Folders Here</h3>
+            <p class="drop-sub">Upload any folder structure or files of any size</p>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOADING -->
+    <script src="/static/orb.js?v=7.0"></script>
+    <script src="/static/script.js?v=7.0"></script>
+</body>
+
+</html>
