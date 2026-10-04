@@ -1,0 +1,2288 @@
+
+============================================================
+T.Y.R.O.N — HYBRID LOCAL + CLOUD AI OS ARCHITECTURE
+PERFORMANCE + MULTI-DEVICE + AUTOMATION + SELF-OPTIMIZATION
+============================================================
+
+PROJECT:
+T.Y.R.O.N
+The Yield-Ready Operating Network
+
+IMPORTANT:
+This is TYRON.
+NOT JARVIS.
+
+============================================================
+0. ABSOLUTE RULE — NEVER REMOVE EXISTING FUNCTIONALITY
+============================================================
+
+NEVER delete, disable, silently replace, or destructively rewrite:
+
+- existing files
+- existing functions
+- existing classes
+- existing services
+- existing routes
+- existing endpoints
+- existing tools
+- existing UI controls
+- existing automation
+- existing Guardian
+- existing Doctor
+- existing HealBot
+- existing Sentinel
+- existing Ghost Mode
+- existing memory
+- existing workflows
+- existing database behavior
+- existing frontend behavior
+- existing local deployment
+- existing Windows capabilities
+
+ADDING is allowed.
+
+IMPROVING is allowed.
+
+WRAPPING existing functionality is allowed.
+
+ADAPTERS are allowed.
+
+COMPATIBILITY layers are allowed.
+
+If removal or destructive replacement becomes technically necessary:
+
+STOP.
+
+Ask me for explicit permission.
+
+============================================================
+1. FINAL TARGET ARCHITECTURE
+============================================================
+
+TYRON must become a HYBRID AI OPERATING SYSTEM.
+
+The same project must support:
+
+A. LOCAL MODE
+B. CLOUD MODE
+C. HYBRID MODE
+D. REMOTE MOBILE MODE
+E. SMARTWATCH MODE
+F. OFFLINE MODE
+
+Concept:
+
+                         T.Y.R.O.N
+                              |
+                    +---------+---------+
+                    |                   |
+              LOCAL CORE          CLOUD CORE
+                    |                   |
+               Windows PC          Oracle Cloud
+                    |                   |
+             Local Agent        Docker/FastAPI
+                    |                   |
+                    +---------+---------+
+                              |
+                    Secure Sync Layer
+                              |
+               +--------------+--------------+
+               |              |              |
+             PC/Laptop       Mobile       Watch
+============================================================
+2. CORE PRINCIPLE
+
+TYRON should automatically decide where a task should run.
+
+ROUTING:
+
+User request
+↓
+Intent classifier
+↓
+Capability router
+↓
+Choose:
+LOCAL
+CLOUD
+HYBRID
+BACKGROUND
+OFFLINE
+
+Examples:
+
+"Calculator kholo"
+→ LOCAL
+
+"Volume 80% karo"
+→ LOCAL
+
+"Chrome kholo"
+→ LOCAL
+
+"Research latest AI news"
+→ CLOUD / HYBRID
+
+"Analyze 500MB CSV"
+→ LOCAL or CLOUD depending resources
+
+"Generate image"
+→ CLOUD
+
+"Private local document summarize karo"
+→ LOCAL preferred
+
+"Long research karo"
+→ CLOUD background job
+
+"PC shutdown karo"
+→ LOCAL
+
+"Mobile se PC pe VS Code kholo"
+→ CLOUD relay → LOCAL AGENT
+
+============================================================
+3. LOCAL-FIRST PRINCIPLE
+
+Prefer local execution whenever:
+
+task is simple
+task needs Windows control
+task uses private local data
+internet is unnecessary
+local resources are sufficient
+latency would be lower
+
+Prefer cloud when:
+
+task needs strong reasoning
+task requires web research
+task needs scalable compute
+task requires image generation
+local resources are insufficient
+user is remote
+task is long-running
+
+Hybrid when:
+
+local computer needs to perform action
+cloud needs to plan/reason
+
+Example:
+
+Cloud:
+PLAN
+
+Local:
+EXECUTE
+
+Local:
+OBSERVE
+
+Cloud:
+REASON / VERIFY
+
+============================================================
+4. MULTI-DEVICE ARCHITECTURE
+
+Implement TYRON as:
+
+TYRON CLOUD
+|
++-- Windows Agent
++-- Laptop Agent
++-- Mobile Client
++-- Smartwatch Client
++-- Browser Client
+
+All clients authenticate to one TYRON identity.
+
+============================================================
+5. WINDOWS TYRON AGENT
+
+Create a dedicated local agent layer for Windows.
+
+It handles:
+
+mouse
+keyboard
+screen
+screenshots
+applications
+browser
+microphone
+speaker
+Windows volume
+brightness
+power
+files
+processes
+clipboard
+notifications
+local models
+local storage
+
+The cloud MUST NOT attempt to directly control a physical Windows
+screen.
+
+Instead:
+
+Cloud
+↓
+Secure Agent Protocol
+↓
+Windows Agent
+↓
+Physical action
+
+============================================================
+6. SECURE AGENT PROTOCOL
+
+Create a secure persistent connection.
+
+Preferred:
+
+WebSocket over TLS.
+
+Support:
+
+connection authentication
+device ID
+heartbeat
+reconnect
+command ID
+acknowledgement
+result
+verification
+cancellation
+timeout
+replay protection
+device permissions
+
+Message structure:
+
+{
+"id": "...",
+"device_id": "...",
+"action": "...",
+"args": {...},
+"timestamp": "...",
+"timeout": ...,
+"requires_confirmation": false
+}
+
+Response:
+
+{
+"id": "...",
+"success": true,
+"verified": true,
+"result": {...}
+}
+
+============================================================
+7. MOBILE ACCESS
+
+Provide mobile-friendly TYRON access.
+
+Minimum:
+
+Responsive web client / PWA.
+
+Capabilities:
+
+chat
+voice
+notifications
+jobs
+task status
+research status
+device list
+remote PC commands
+screenshots
+alerts
+file upload
+project access
+
+Do not assume the mobile browser can directly control Windows.
+
+It should communicate through:
+
+Mobile
+↓
+TYRON Cloud
+↓
+Windows Agent
+
+============================================================
+8. SMARTWATCH ACCESS
+
+Design a lightweight smartwatch notification/command layer.
+
+Do NOT attempt to put the entire TYRON UI on a watch.
+
+Watch should focus on:
+
+notifications
+alarms
+reminders
+incoming messages
+task completion
+urgent alerts
+quick commands
+voice initiation where platform supports it
+approve/deny actions
+show job progress
+
+Examples:
+
+"Research complete"
+
+"Meeting in 10 minutes"
+
+"New important email"
+
+"PC battery low"
+
+Quick action:
+
+[Pause]
+[Approve]
+[Dismiss]
+[Open]
+
+Create a platform-neutral notification API so future Wear OS /
+watchOS clients can use it.
+
+============================================================
+9. DEVICE MANAGER
+
+Create a device registry.
+
+Device:
+
+{
+"id": "...",
+"name": "...",
+"type": "windows/laptop/mobile/watch",
+"status": "online/offline",
+"last_seen": "...",
+"capabilities": [...],
+"permissions": [...]
+}
+
+TYRON should understand:
+
+"meri laptop par..."
+
+"mere PC par..."
+
+"mobile par..."
+
+"watch par..."
+
+============================================================
+10. FAST RESPONSE ENGINE
+
+Improve perceived and actual latency.
+
+Never make TYRON wait for slow work when immediate acknowledgement
+is possible.
+
+Example:
+
+User:
+"Deep research karo."
+
+Immediately:
+
+"Boss, research start kar di."
+
+Then background job runs.
+
+Completion:
+
+"Boss, research complete ho gayi."
+
+Never block the chat waiting for the whole task.
+
+============================================================
+11. RESPONSE LATENCY TARGETS
+
+Set practical targets.
+
+LOCAL SIMPLE ACTION:
+< 1 second preferred
+
+LOCAL SYSTEM QUERY:
+~1 second or a few seconds
+
+LLM FIRST TOKEN:
+as fast as provider allows
+
+BACKGROUND TASK:
+immediate acknowledgement
+
+Do NOT promise every task completes in seconds.
+
+Optimize:
+
+time-to-first-response
+time-to-first-token
+tool dispatch latency
+tool execution
+final result latency
+
+Track each separately.
+
+============================================================
+12. PARALLEL EXECUTION
+
+Where tasks are independent, execute them concurrently.
+
+Example:
+
+Research requires:
+
+Search A
+Search B
+Search C
+
+Run in parallel.
+
+Then:
+
+combine
+→ analyze
+→ final response
+
+Do NOT sequentially wait when unnecessary.
+
+Use asyncio safely.
+
+CPU-heavy work:
+offload to worker process/thread.
+
+Do not block FastAPI event loop.
+
+============================================================
+13. JOB SYSTEM
+
+Expand existing Job Manager.
+
+Every long-running task becomes a job.
+
+States:
+
+QUEUED
+RUNNING
+WAITING
+PAUSED
+COMPLETED
+FAILED
+CANCELLED
+
+Job supports:
+
+progress
+logs
+ETA where meaningful
+cancellation
+retry
+checkpoint
+resume
+notifications
+============================================================
+14. TASK PRIORITIES
+
+Support:
+
+CRITICAL
+HIGH
+NORMAL
+LOW
+BACKGROUND
+
+Scheduler should prefer appropriate priority.
+
+Example:
+
+Emergency system alert:
+CRITICAL
+
+Normal research:
+NORMAL
+
+Index rebuilding:
+BACKGROUND
+
+============================================================
+15. RESOURCE-AWARE SCHEDULER
+
+Before running expensive local work check:
+
+RAM
+CPU
+GPU
+disk
+battery
+thermals where available
+current load
+
+If local machine is overloaded:
+
+route to cloud when possible.
+
+If cloud is expensive/slow:
+
+use local when appropriate.
+
+============================================================
+16. PERFORMANCE OPTIMIZER
+
+Create:
+
+app/services/performance_optimizer_service.py
+
+It continuously evaluates:
+
+CPU usage
+RAM usage
+disk usage
+vector search latency
+LLM latency
+tool latency
+startup time
+queue size
+cache hit rate
+
+It should recommend or safely perform non-destructive optimizations.
+
+============================================================
+17. MEMORY OPTIMIZATION
+
+Reduce unnecessary RAM usage.
+
+Implement:
+
+bounded caches
+LRU caches
+lazy loading
+unload idle models
+memory-aware context
+batch processing
+streaming
+background workers
+
+Never load huge datasets into RAM unnecessarily.
+
+============================================================
+18. MODEL LIFECYCLE MANAGER
+
+Create:
+
+app/services/model_manager_service.py
+
+Manage:
+
+local embedding model
+local LLM
+Whisper
+vision models
+future models
+
+Rules:
+
+lazy load
+keep hot when frequently used
+unload when idle
+detect memory pressure
+avoid duplicate model instances
+============================================================
+19. VECTOR STORE OPTIMIZATION
+
+Current FAISS system must remain.
+
+Improve with:
+
+lazy loading
+memory mapping where suitable
+cache
+incremental indexing
+background indexing
+deduplicated embeddings
+batching
+metadata filters
+periodic compaction
+
+Do not rebuild entire vector store after every file.
+
+============================================================
+20. CONTEXT OPTIMIZER
+
+Do not send entire chat history to LLM.
+
+Use:
+
+recent context
++
+relevant memory
++
+relevant files
++
+relevant project context
++
+summary
+
+Implement context compression.
+
+Keep important facts.
+
+Drop irrelevant repetition.
+
+============================================================
+21. CHAT RESPONSE QUALITY
+
+Improve natural human conversation.
+
+TYRON should:
+
+understand casual speech
+understand Roman Urdu
+understand Urdu
+understand English
+understand mixed language
+maintain context
+not repeatedly ask obvious questions
+avoid robotic phrases
+avoid unnecessary explanations
+answer naturally
+recognize emotional tone
+distinguish commands from conversation
+
+Examples:
+
+User:
+"yaar bohat thak gaya hoon"
+
+TYRON should respond naturally.
+
+User:
+"acha chalo chrome kholo"
+
+TYRON should execute.
+
+Do not confuse conversation with commands.
+
+============================================================
+22. CONVERSATIONAL INTENT ENGINE
+
+Create a lightweight intent layer BEFORE expensive tool reasoning.
+
+Classify:
+
+CHAT
+COMMAND
+QUESTION
+SEARCH
+RESEARCH
+AUTOMATION
+FILE
+VISION
+VOICE
+TASK
+REMINDER
+BACKGROUND JOB
+SYSTEM
+EMERGENCY
+
+Simple commands should avoid unnecessary LLM round trips where possible.
+
+============================================================
+23. COMMAND SHORTCUT ENGINE
+
+User wants shortcuts understood naturally.
+
+Examples:
+
+"wifi on"
+"wifi band"
+
+"volume full"
+"awaaz aadhi"
+
+"chrome kholo"
+
+"pc lock"
+
+"sleep"
+
+"downloads kholo"
+
+"copy this"
+
+"paste"
+
+"screen dikhao"
+
+"ss lo"
+
+"isko band karo"
+
+Map natural variants to capabilities.
+
+Support:
+
+Urdu
+Roman Urdu
+English
+mixed speech
+
+Do not create thousands of brittle hard-coded phrases.
+
+Use normalized intent + synonyms.
+
+============================================================
+24. COMMAND CONFIRMATION LOGIC
+
+For low-risk commands:
+
+execute immediately.
+
+For dangerous commands:
+
+confirmation according to permissions.
+
+Examples:
+
+"Calculator kholo"
+→ immediate
+
+"Volume 80%"
+→ immediate
+
+"PC shutdown"
+→ according to configured policy
+
+"Delete folder"
+→ confirmation
+
+============================================================
+25. COMPUTER USE 2.0
+
+Upgrade existing Computer Use.
+
+Flow:
+
+OBSERVE
+↓
+UNDERSTAND
+↓
+PLAN
+↓
+ACT
+↓
+OBSERVE
+↓
+VERIFY
+
+Prefer:
+
+UI state
+window title
+accessibility tree
+semantic selectors
+OCR
+visual understanding
+
+before raw coordinates.
+
+PyAutoGUI remains as fallback.
+
+============================================================
+26. BROWSER AGENT
+
+Create a dedicated browser agent.
+
+Capabilities:
+
+open browser
+navigate
+search
+click
+type
+extract page data
+download
+upload
+switch tabs
+close tabs
+verify page state
+
+Use browser automation safely.
+
+Browser agent should have:
+
+observe
+→ action
+→ verify
+
+============================================================
+27. WEB SEARCH
+
+Create two paths:
+
+FAST SEARCH
+DEEP RESEARCH
+
+FAST SEARCH:
+few sources, quick answer.
+
+DEEP RESEARCH:
+multiple sources
+→ extract
+→ compare
+→ synthesize
+→ citations
+→ report
+
+Existing Tavily integration remains.
+
+============================================================
+28. IMAGE GENERATION SYSTEM
+
+Add a proper image-generation abstraction.
+
+Create:
+
+app/services/image_generation_service.py
+
+Do not hard-code the entire project to one provider.
+
+Create provider interface:
+
+generate_image(prompt, settings)
+
+Providers can be added later.
+
+Support:
+
+prompt
+size
+aspect ratio
+quality
+style
+negative prompt where supported
+seed where supported
+image-to-image where provider supports
+editing where supported
+
+Return:
+
+image URL/path
+metadata
+provider
+model
+generation time
+
+============================================================
+29. IMAGE GENERATION ROUTING
+
+User:
+
+"mere liye cyberpunk TYRON logo banao"
+
+TYRON should recognize:
+
+IMAGE_GENERATION
+
+Then:
+
+→ image generation service
+
+Not:
+
+→ normal text answer
+
+Do not claim an image was generated unless generation actually succeeded.
+
+============================================================
+30. IMAGE UNDERSTANDING
+
+Support:
+
+image upload
+screenshot analysis
+OCR
+UI analysis
+document image analysis
+visual comparison
+
+Use the most appropriate available vision provider/model.
+
+============================================================
+31. FILE PIPELINE
+
+Maintain and improve existing file intelligence.
+
+Pipeline:
+
+upload
+↓
+validate
+↓
+identify type
+↓
+extract
+↓
+index
+↓
+store metadata
+↓
+analyze
+↓
+link to conversation/project
+
+Use background jobs for expensive indexing.
+
+============================================================
+32. EMAIL / MESSAGE / CALENDAR
+
+Preserve existing communication capabilities.
+
+Build an integration abstraction.
+
+Each connector:
+
+connect()
+disconnect()
+health()
+poll()
+subscribe()
+normalize_event()
+
+Normalize everything into TYRON events.
+
+============================================================
+33. PROACTIVE EVENT ENGINE
+
+Preserve existing:
+
+event_bus.py
+notification_dispatcher.py
+job_manager.py
+
+Expand event monitoring.
+
+Events:
+
+email
+message
+calendar
+reminder
+alarm
+file
+download
+job
+research
+system
+network
+battery
+storage
+automation
+guardian
+security
+
+Event:
+
+detect
+→ deduplicate
+→ prioritize
+→ notify
+→ persist
+
+No user message required.
+
+============================================================
+34. NOTIFICATION DELIVERY
+
+Provide channels:
+
+web UI
+Windows Toast
+browser notification
+mobile push where configured
+smartwatch notification
+TTS
+Telegram where authorized
+
+Respect:
+
+quiet hours
+privacy
+priority
+cooldown
+duplication
+============================================================
+35. NATURAL VOICE SYSTEM
+
+Upgrade current voice.
+
+Pipeline:
+
+speech recognition
+↓
+intent
+↓
+reason/action
+↓
+response
+↓
+TTS
+
+Optimize perceived speed.
+
+Do not wait for entire long answer before speaking where sentence
+streaming is possible.
+
+Speak sentence-by-sentence.
+
+Support:
+
+Urdu
+English
+Roman Urdu interpretation
+mixed speech
+
+Voice should sound conversational rather than robotic.
+
+============================================================
+36. VOICE INTERRUPTION
+
+While TYRON is speaking:
+
+User:
+"rukko"
+
+TYRON should stop speaking quickly.
+
+Support:
+
+interrupt
+cancel generation
+resume
+barge-in
+============================================================
+37. VOICE MODE
+
+Preserve current voice mode.
+
+Improve:
+
+wake detection
+noise handling
+false activation reduction
+latency
+microphone state
+speaking state
+listening state
+
+Do NOT use legacy JARVIS branding.
+
+============================================================
+38. AUTONOMOUS OPERATING MODE
+
+Create configurable autonomy levels:
+
+LEVEL 0:
+answer only
+
+LEVEL 1:
+execute low-risk commands
+
+LEVEL 2:
+execute multi-step tasks
+
+LEVEL 3:
+background tasks + notifications
+
+LEVEL 4:
+high autonomy with confirmation policy
+
+Never bypass safety.
+
+============================================================
+39. SELF-OPTIMIZATION ENGINE
+
+Create:
+
+app/services/system_optimizer_service.py
+
+The optimizer continuously monitors:
+
+CPU
+RAM
+disk
+queues
+latency
+cache
+model usage
+background workers
+database size
+logs
+temporary files
+vector indexes
+
+Safe optimization examples:
+
+clear temporary cache
+compact logs
+prune expired event data
+clean stale job records
+optimize indexes
+close idle workers
+unload unused local models
+reduce redundant cache
+compact old summaries
+
+NEVER automatically delete user files.
+
+NEVER delete chat history without configured retention policy.
+
+============================================================
+40. RESOURCE RETENTION POLICY
+
+Implement configurable retention:
+
+logs:
+X days
+
+events:
+X days
+
+temporary screenshots:
+X days
+
+job history:
+X days
+
+old caches:
+X days
+
+Never silently delete important user data.
+
+============================================================
+41. HANG PREVENTION
+
+Create watchdog protections.
+
+Monitor:
+
+event loop latency
+worker queue
+subprocess timeout
+HTTP timeout
+tool timeout
+LLM timeout
+memory pressure
+deadlocks
+
+Every external or blocking operation must have a timeout.
+
+============================================================
+42. CIRCUIT BREAKERS
+
+If external service repeatedly fails:
+
+OPEN CIRCUIT
+
+Do not hammer it repeatedly.
+
+Example:
+
+Groq unavailable
+→ temporarily stop repeated calls
+→ use fallback
+
+Tavily unavailable
+→ fallback
+
+Ollama unavailable
+→ fallback
+
+Image provider unavailable
+→ report accurately
+
+============================================================
+43. CONNECTION POOLING
+
+Reuse HTTP sessions/connections where practical.
+
+Avoid opening a new connection for every request.
+
+============================================================
+44. CACHING
+
+Add safe caches for:
+
+weather
+repeated static web lookups
+embeddings
+system info
+model metadata
+
+Use expiration.
+
+Never cache sensitive dynamic information indefinitely.
+
+============================================================
+45. LLM ROUTER
+
+Create a model router.
+
+Concept:
+
+REQUEST
+↓
+complexity estimate
+↓
+privacy requirement
+↓
+latency requirement
+↓
+resource availability
+↓
+choose model
+
+Examples:
+
+small local model:
+simple intent/classification
+
+Groq:
+fast strong reasoning
+
+local Ollama:
+private/offline tasks
+
+specialized vision:
+images
+
+image model:
+generation
+
+research:
+LLM + web
+
+Do not send every tiny command to a huge model.
+
+============================================================
+46. COST OPTIMIZATION
+
+Track cloud/model usage.
+
+Avoid unnecessary API calls.
+
+For simple commands:
+
+do not call LLM multiple times.
+
+For repeated questions:
+
+reuse context when appropriate.
+
+============================================================
+47. ERROR RECOVERY
+
+Preserve and upgrade Guardian.
+
+Architecture:
+
+Guardian
++
+HealBot
++
+QA
++
+Rollback
++
+Repair Memory
+
+Clear responsibilities.
+
+Guardian:
+process-level supervision
+
+HealBot:
+runtime error reaction
+
+QA:
+testing
+
+Repair Engine:
+patch generation/application
+
+Doctor:
+legacy/manual compatibility
+
+Avoid multiple systems racing to patch the same file.
+
+============================================================
+48. GUARDIAN REPAIR AUTHORITY
+
+For automatic code repair:
+
+Guardian should be the primary repair authority.
+
+Prevent:
+
+Doctor
++
+HealBot
++
+Guardian
+
+from independently modifying the same file simultaneously.
+
+Use a shared repair lock.
+
+============================================================
+49. REPAIR PIPELINE
+
+ERROR
+↓
+capture
+↓
+diagnose
+↓
+classify
+↓
+safe deterministic fix
+↓
+local LLM
+↓
+Groq
+↓
+Tavily research
+↓
+patch
+↓
+backup
+↓
+compile
+↓
+test
+↓
+restart
+↓
+health
+↓
+regression
+
+Maximum 3 attempts.
+
+Then STOP and notify.
+
+============================================================
+50. CODE CHANGE SAFETY
+
+Before any automatic code modification:
+
+backup.
+
+After patch:
+
+compile
++
+AST
++
+targeted test
+
+If failed:
+
+rollback.
+
+Never modify unrelated files.
+
+============================================================
+51. LOCAL/CLOUD FAILOVER
+
+If Cloud unavailable:
+
+local capabilities continue.
+
+If local Windows Agent unavailable:
+
+cloud chat/research still work.
+
+If internet unavailable:
+
+local/offline capabilities continue.
+
+If Groq unavailable:
+
+use configured fallbacks.
+
+If Ollama unavailable:
+
+continue without it.
+
+============================================================
+52. CLOUD DEPLOYMENT
+
+Design cloud deployment around:
+
+Oracle Cloud
+Ubuntu
+Docker
+FastAPI
+React/PWA
+
+Recommended separation:
+
+services/
+api
+worker
+scheduler
+realtime
+notifications
+
+Avoid one giant blocking FastAPI process for every task.
+
+============================================================
+53. CONTAINERIZATION
+
+Create:
+
+Dockerfile
+docker-compose.yml
+
+where appropriate.
+
+Separate:
+
+API
+Worker
+Scheduler
+Realtime
+
+Use persistent storage for:
+
+database
+uploads
+vector indexes
+job state
+
+Do not store important persistent data only inside ephemeral containers.
+
+============================================================
+54. DATABASE EVOLUTION
+
+Current JSON/FAISS storage MUST NOT be destroyed.
+
+Introduce a storage abstraction.
+
+Initial support:
+
+JSON + FAISS
+
+Cloud-ready:
+
+PostgreSQL + object storage + vector persistence
+
+Migration must be additive.
+
+Provide:
+
+import_existing_data()
+
+No silent deletion.
+
+============================================================
+55. STORAGE ABSTRACTION
+
+Create repository interfaces:
+
+ChatRepository
+MemoryRepository
+TaskRepository
+EventRepository
+JobRepository
+ProjectRepository
+FileRepository
+
+Then implementations:
+
+JSON repository
+PostgreSQL repository
+
+This allows local and cloud deployments to use different backends.
+
+============================================================
+56. CONFIGURATION PROFILES
+
+Support:
+
+LOCAL
+CLOUD
+HYBRID
+OFFLINE
+
+Configuration should select:
+
+storage
+LLM provider
+notification channels
+agent endpoints
+resource policy
+
+============================================================
+57. LOCAL PROFILE
+
+LOCAL:
+
+local filesystem
+local database
+local FAISS
+Windows Agent
+optional Ollama
+optional Groq
+optional Tavily
+
+Works without cloud.
+
+============================================================
+58. CLOUD PROFILE
+
+CLOUD:
+
+FastAPI
+PostgreSQL
+object storage
+vector persistence
+cloud workers
+cloud notification infrastructure
+authenticated device agents
+
+No PyAutoGUI on server.
+
+============================================================
+59. HYBRID PROFILE
+
+HYBRID:
+
+Cloud:
+
+reasoning
+research
+planning
+memory sync
+long tasks
+
+Local:
+
+computer control
+local files
+microphone
+speaker
+Windows apps
+
+This is the preferred mode.
+
+============================================================
+60. OFFLINE PROFILE
+
+OFFLINE:
+
+local LLM if available
+local memory
+local tools
+local files
+local automation
+local TTS/STT
+
+No external network dependency.
+
+============================================================
+61. AUTHENTICATION
+
+Use strong device/user authentication.
+
+Each device has:
+
+device ID
+device key/token
+permissions
+
+Cloud must never blindly trust any connected device.
+
+============================================================
+62. REMOTE COMMAND SECURITY
+
+Remote commands should include:
+
+command ID
+device ID
+timestamp
+authentication
+nonce/replay protection where appropriate
+
+Dangerous commands:
+
+shutdown
+delete
+credential access
+etc.
+
+must respect permission policy.
+
+============================================================
+63. MOBILE / WATCH SECURITY
+
+Mobile/watch clients should never receive unrestricted system-control
+credentials.
+
+Use restricted capability tokens.
+
+============================================================
+64. PROJECT MEMORY
+
+Preserve existing memory.
+
+Add project-scoped memory:
+
+Project
+↓
+Chats
+↓
+Files
+↓
+Tasks
+↓
+Goals
+↓
+Memory
+↓
+Research
+
+============================================================
+65. CONTEXT-AWARE DEVICE ROUTING
+
+If user says:
+
+"Chrome kholo"
+
+and only one PC is connected:
+use that PC.
+
+If multiple devices:
+
+ask only if necessary.
+
+If user says:
+
+"mere laptop par Chrome kholo"
+
+route directly.
+
+============================================================
+66. RESUMABLE WORK
+
+When cloud/local connectivity drops:
+
+job state survives.
+
+Upon reconnect:
+
+resume if safe.
+
+Example:
+
+long research 60%
+connection lost
+↓
+state saved
+↓
+reconnect
+↓
+resume
+
+============================================================
+67. BACKGROUND WORKER MODEL
+
+Separate long tasks from request/response path.
+
+Examples:
+
+research
+file indexing
+image generation
+backup
+large data analysis
+repair jobs
+
+must use background workers.
+
+============================================================
+68. UI ARCHITECTURE
+
+Current TYRON UI remains conceptually intact.
+
+If moving to React:
+
+DO NOT delete current frontend.
+
+Create migration/compatibility layer.
+
+React components may progressively replace individual sections.
+
+Current orb remains available.
+
+============================================================
+69. PERFORMANCE UI
+
+Add subtle status indicators:
+
+LOCAL
+CLOUD
+HYBRID
+
+TASK RUNNING
+SEARCHING
+ANALYZING
+EXECUTING
+VERIFYING
+COMPLETE
+FAILED
+
+Do not make the UI noisy.
+
+============================================================
+70. USER EXPERIENCE
+
+The assistant should not expose internal implementation unnecessarily.
+
+User says:
+
+"wifi band karo"
+
+TYRON should respond naturally after actual action.
+
+Not:
+
+"Invoking network_control tool..."
+
+unless debugging mode is active.
+
+============================================================
+71. SMART RESPONSE FORM
+
+For simple actions:
+
+short confirmation.
+
+For complex work:
+
+brief acknowledgement
++
+background execution
++
+proactive completion
+
+Examples:
+
+"Boss, Chrome khol diya."
+
+"Boss, research start kar di."
+
+Later:
+
+"Boss, research complete ho gayi."
+
+============================================================
+72. IMAGE GENERATION UX
+
+User:
+
+"TYRON, aik futuristic TYRON logo bana."
+
+Flow:
+
+intent
+→ image generation
+→ generate
+→ save/return
+→ show result
+
+Do not answer with a text-only description if image generation
+capability is available.
+
+============================================================
+73. SEARCH UX
+
+User:
+
+"Latest AI news batao."
+
+Fast search.
+
+User:
+
+"AI agents par detailed research karo."
+
+Deep research.
+
+Do not use expensive deep research for simple questions.
+
+============================================================
+74. TASK DECOMPOSITION
+
+Complex user request:
+
+"TYRON, mera project deploy karke verify karo."
+
+Planner creates:
+
+inspect
+→ prepare
+→ build
+→ deploy
+→ health
+→ verify
+→ report
+
+Each step independently tracked.
+
+============================================================
+75. SMART PRIORITIZATION
+
+When multiple jobs exist:
+
+prioritize:
+
+critical system jobs
+user foreground tasks
+time-sensitive tasks
+background maintenance
+
+Do not let optimization workers starve user tasks.
+
+============================================================
+76. HEALTH DASHBOARD
+
+Create a system health model:
+
+CPU
+RAM
+disk
+latency
+worker queue
+LLM
+database
+vector store
+agents
+events
+notifications
+Guardian
+
+Expose via:
+
+GET /health
+GET /system/health/detailed
+
+============================================================
+77. PERFORMANCE SELF-OPTIMIZATION LOOP
+
+Continuous loop:
+
+MEASURE
+↓
+ANALYZE
+↓
+IDENTIFY BOTTLENECK
+↓
+SAFE OPTIMIZATION
+↓
+MEASURE AGAIN
+
+Only perform low-risk automatic optimizations.
+
+For risky changes:
+notify user.
+
+============================================================
+78. ANTI-HANG ARCHITECTURE
+
+Every subsystem must have:
+
+timeout
+cancellation
+health state
+restart/recovery policy
+
+No infinite waits.
+
+No unbounded queues.
+
+No unlimited retries.
+
+============================================================
+79. OBSERVABILITY
+
+Track:
+
+request latency
+TTFT
+tool latency
+queue latency
+memory usage
+CPU
+worker state
+cloud latency
+agent latency
+
+Provide a performance report.
+
+============================================================
+80. TESTING MATRIX
+
+Create tests for:
+
+LOCAL mode
+CLOUD mode
+HYBRID mode
+OFFLINE mode
+
+Test:
+
+chat
+voice
+files
+research
+image generation
+Windows automation
+remote agent
+mobile
+watch notification
+events
+jobs
+Guardian
+recovery
+failover
+performance
+memory
+
+============================================================
+81. REAL FAILURE TESTS
+
+Simulate:
+
+Cloud unavailable
+Groq unavailable
+Tavily unavailable
+Ollama unavailable
+Windows Agent disconnected
+Network disconnected
+Database temporarily unavailable
+Worker crashed
+Guardian repair failure
+
+Verify fallback.
+
+============================================================
+82. NO FALSE SUCCESS
+
+NEVER say:
+
+"Done"
+"Completed"
+"Ho gaya"
+
+unless the operation actually succeeded.
+
+Important actions require verification.
+
+============================================================
+83. DEPLOYMENT RULE
+
+Do not make cloud deployment dependent on Windows libraries.
+
+Cloud image must not require:
+
+pyautogui
+pygetwindow
+Windows-only APIs
+
+unless imported conditionally and unused in cloud mode.
+
+============================================================
+84. WINDOWS AGENT RULE
+
+Windows-specific functionality belongs in the local agent.
+
+Keep existing service implementations available.
+
+Do not delete them from TYRON.
+
+Wrap them behind Agent capability interfaces.
+
+============================================================
+85. MOBILE/WATCH NOTIFICATION LATENCY
+
+Use event-driven push.
+
+Do not make mobile/watch continuously poll.
+
+Preferred:
+
+event
+→ realtime push
+→ device notification
+
+============================================================
+86. IMAGE / FILE STORAGE
+
+Generated images and uploaded files should use a storage abstraction.
+
+LOCAL:
+filesystem
+
+CLOUD:
+object storage / persistent volume
+
+Do not hard-code local paths into cloud services.
+
+============================================================
+87. API VERSIONING
+
+Use versioned APIs where introducing cloud/mobile clients.
+
+Example:
+
+/api/v1/...
+
+Do not break existing endpoints.
+
+Existing routes remain available.
+
+============================================================
+88. DOCUMENTATION
+
+Create:
+
+TYRON_LOCAL_MODE.md
+TYRON_CLOUD_MODE.md
+TYRON_HYBRID_MODE.md
+TYRON_WINDOWS_AGENT.md
+TYRON_MOBILE.md
+TYRON_SMARTWATCH.md
+TYRON_PERFORMANCE.md
+TYRON_OPTIMIZER.md
+TYRON_GUARDIAN.md
+
+============================================================
+89. IMPLEMENTATION ORDER
+
+Do NOT rewrite everything at once.
+
+PHASE 1:
+Architecture abstraction
+
+capability registry
+local/cloud router
+device registry
+storage abstraction
+
+PHASE 2:
+Windows Agent
+
+secure WebSocket
+remote execution
+device heartbeat
+
+PHASE 3:
+Performance
+
+timeouts
+parallel execution
+cache
+model manager
+resource scheduler
+
+PHASE 4:
+Task system
+
+background jobs
+resumable jobs
+priorities
+cancellation
+
+PHASE 5:
+Search/research
+
+fast search
+deep research
+
+PHASE 6:
+Image intelligence
+
+image understanding
+image generation provider abstraction
+
+PHASE 7:
+Mobile/PWA
+
+responsive remote client
+push notifications
+
+PHASE 8:
+Smartwatch notification API
+
+PHASE 9:
+Self-optimization engine
+
+PHASE 10:
+Guardian/HealBot integration cleanup
+
+PHASE 11:
+Testing
+
+local
+cloud
+hybrid
+offline
+failover
+============================================================
+90. FIRST TASK
+
+DO NOT MODIFY CODE YET.
+
+First audit the existing repository.
+
+Inspect:
+
+app/main.py
+config.py
+requirements.txt
+run.py
+auth_middleware.py
+all services
+tools_service.py
+system_control_service.py
+computer_use_service.py
+device_queue_service.py
+communication_service.py
+vector_store.py
+event_bus.py
+notification_dispatcher.py
+job_manager.py
+guardian/
+doctor.py
+healbot_service.py
+frontend
+database
+wheels
+current deployment assumptions
+
+Then produce:
+
+A. CURRENT ARCHITECTURE
+B. LOCAL-ONLY COMPONENTS
+C. CLOUD-ONLY COMPONENTS
+D. HYBRID COMPONENTS
+E. WINDOWS-SPECIFIC COMPONENTS
+F. STORAGE DEPENDENCIES
+G. NETWORK DEPENDENCIES
+H. PERFORMANCE BOTTLENECKS
+I. EXISTING FUNCTIONALITY TO PRESERVE
+J. FILES TO MODIFY
+K. FILES TO ADD
+L. MIGRATION STRATEGY
+M. MOBILE PLAN
+N. SMARTWATCH PLAN
+O. SELF-OPTIMIZER PLAN
+P. GUARDIAN PLAN
+
+DO NOT DELETE ANYTHING.
+
+============================================================
+91. FINAL ACCEPTANCE CRITERIA
+
+The final architecture must satisfy:
+
+[ ] TYRON runs locally
+[ ] TYRON runs in cloud
+[ ] TYRON supports hybrid mode
+[ ] Windows control works through local agent
+[ ] mobile can access TYRON
+[ ] smartwatch can receive TYRON notifications
+[ ] long tasks run asynchronously
+[ ] user gets immediate acknowledgement
+[ ] completion notification requires no new message
+[ ] simple commands are low latency
+[ ] tasks execute in parallel where safe
+[ ] resource-aware scheduling works
+[ ] memory usage is bounded
+[ ] expensive models are lazy-loaded
+[ ] system optimizer works
+[ ] no infinite task loops
+[ ] no infinite retries
+[ ] Guardian is independent
+[ ] Guardian auto-repairs safe issues
+[ ] Guardian does not loop endlessly
+[ ] web search works
+[ ] deep research works
+[ ] image generation abstraction exists
+[ ] image understanding works
+[ ] local/offline mode continues without cloud
+[ ] cloud outage does not destroy local capabilities
+[ ] local agent outage does not destroy cloud chat/research
+[ ] existing functionality remains intact
+
+============================================================
+92. FINAL NON-NEGOTIABLE RULE
+
+ADD.
+EXTEND.
+WRAP.
+IMPROVE.
+OPTIMIZE.
+
+DO NOT REMOVE.
+
+If anything must be removed:
+STOP.
+ASK FOR EXPLICIT PERMISSION.
+
+Never claim a capability is working unless it has actually been tested.
+
+============================================================
+END
+
+### Is design mein sabse important improvement
+
+TYRON ko **one giant application** mat banana:
+
+```text
+❌
+TYRON = FastAPI + Windows + AI + Voice + Mobile + Watch + Everything
+         ek hi process mein
+
+Balki:
+
+                    TYRON CLOUD
+                         │
+            ┌────────────┼────────────┐
+            │            │            │
+          Brain        Jobs        Events
+            │            │            │
+            └────────────┼────────────┘
+                         │
+                 Secure Device Layer
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+   Windows Agent    Mobile/PWA       Watch API
+        │
+  ┌─────┼─────┐
+  │     │     │
+Screen Apps Files
