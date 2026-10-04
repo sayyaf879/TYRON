@@ -1,0 +1,53 @@
+# T.Y.R.O.N tyron_next - Python Dependencies
+# Install: pip install -r requirements.txt
+
+# ── Web Framework ─────────────────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ── Data Validation ───────────────────────────────────────────────────────────
+pydantic
+
+# ── LLM & LangChain ──────────────────────────────────────────────────────────
+groq
+langchain
+langchain-groq
+langchain-community
+langchain-core
+langchain-huggingface
+
+# ── Embeddings & Vector Store ─────────────────────────────────────────────────
+sentence-transformers
+faiss-cpu
+torch
+transformers
+
+# ── Web Search ────────────────────────────────────────────────────────────────
+tavily-python
+
+# ── External API Calls (weather, news, stocks, github) ───────────────────────
+requests
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+python-dotenv
+numpy
+rich
+
+# ── Mouse / Keyboard Control ─────────────────────────────────────────────────
+# Required for /system/mouse/* and /system/keyboard/* endpoints
+pyautogui
+pillow    # required by pyautogui for screenshot support
+pynput    # optional: low-level key listener (used for advanced key hold)
+
+# ── Voice / TTS ──────────────────────────────────────────────────────────────
+# gTTS: online, clear Google voice (recommended)
+gtts
+# pyttsx3: offline fallback voice
+pyttsx3
+edge-tts
+
+# ── Document & Spreadsheet Intelligence ──────────────────────────────────────
+pypdf
+python-docx
+openpyxl
